@@ -13,44 +13,40 @@ import requests
 import loguru
 
 
-def scrape_data_point():
+def scrape_home_headline():
     """
     Scrapes the main headline from The Daily Pennsylvanian home page.
 
     Returns:
-        # str: The headline text if found, otherwise an empty string.
-        dict: A dictionary containing the top headline for each section.
+        str: The headline text if found, otherwise an empty string.
     """
     req = requests.get("https://www.thedp.com")
     loguru.logger.info(f"Request URL: {req.url}")
     loguru.logger.info(f"Request status code: {req.status_code}")
 
-    headlines = {}
-
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-
-        #target_element = soup.find("a", class_="frontpage-link")
-        #data_point = "" if target_element is None else target_element.text
-        #loguru.logger.info(f"Data point: {data_point}")
-        # return data_point
-
         target_element = soup.find("a", class_="frontpage-link")
-        if target_element:
-            target_headline = target_element.find("h2").text.strip()
-            headlines["target"] = target_headline
-        else:
-            headlines["target"] = ""
-        
-        featured_element = soup.find("div", class_="featured-article")
-        if featured_element:
-            featured_headline = featured_element.find("h2").text.strip()
-            headlines["featured"] = featured_headline
-        else:
-            headlines["featured"] = ""
+        data_point = "" if target_element is None else target_element.text
+        loguru.logger.info(f"Data point: {data_point}")
+        return data_point
     
-    loguru.logger.info(f"Headlines: {headlines}")
-    return headlines
+def scrape_data_point_mens_lax():
+    """
+    Scrapes the main headline from The Daily Pennsylvanian Men's Lacrosse section.
+    Returns:
+        str: The headline text if found, otherwise an empty string.
+    """
+    req = requests.get("https://www.thedp.com/section/mens_lacrosse")
+    loguru.logger.info(f"Request URL: {req.url}")
+    loguru.logger.info(f"Request status code: {req.status_code}")
+    if req.ok:
+        soup = bs4.BeautifulSoup(req.text, "html.parser")
+        target_element = soup.find("h2", class_="article-title")
+        data_point = "" if target_element is None else target_element.text.strip()
+        loguru.logger.info(f"Data point: {data_point}")
+        return data_point
+
 
 if __name__ == "__main__":
 
@@ -74,7 +70,12 @@ if __name__ == "__main__":
     # Run scrape
     loguru.logger.info("Starting scrape")
     try:
-        data_point = scrape_data_point()
+        home_headline = scrape_home_headline()
+        lacrosse_headline = scrape_data_point_mens_lax()
+        data_point = {
+            "home_headline": home_headline,
+            "lacrosse_headline": lacrosse_headline
+        }
     except Exception as e:
         loguru.logger.error(f"Failed to scrape data point: {e}")
         data_point = None
