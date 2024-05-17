@@ -42,8 +42,13 @@ def scrape_data_point_mens_lax():
     loguru.logger.info(f"Request status code: {req.status_code}")
     if req.ok:
         soup = bs4.BeautifulSoup(req.text, "html.parser")
-        target_element = soup.find("h2", class_="article-title")
-        data_point = "" if target_element is None else target_element.text.strip()
+
+        target_element = soup.find("div", class_="row section-article")
+        if target_element:
+            data_point = target_element.find("h3", class_="standard-link").text.strip()
+
+        # target_element = soup.find("h2", class_="article-title")
+        # data_point = "" if target_element is None else target_element.text.strip()
         loguru.logger.info(f"Data point: {data_point}")
         return data_point
 
