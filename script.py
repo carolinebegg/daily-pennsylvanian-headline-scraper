@@ -31,7 +31,7 @@ def scrape_home_headline():
         loguru.logger.info(f"Data point: {data_point}")
         return data_point
     
-def scrape_data_point_mens_lax():
+def scrape_data_point_lacrose():
     """
     Scrapes the main headline from The Daily Pennsylvanian Men's Lacrosse section.
     Returns:
@@ -47,8 +47,63 @@ def scrape_data_point_mens_lax():
         if target_element:
             data_point = target_element.find("h3", class_="standard-link").text.strip()
 
-        # target_element = soup.find("h2", class_="article-title")
-        # data_point = "" if target_element is None else target_element.text.strip()
+        loguru.logger.info(f"Data point: {data_point}")
+        return data_point
+
+def scrape_data_point_squash():
+    """
+    Scrapes the main headline from The Daily Pennsylvanian Men's Squash section.
+    Returns:
+        str: The headline text if found, otherwise an empty string.
+    """
+    req = requests.get("https://www.thedp.com/section/mens_squash")
+    loguru.logger.info(f"Request URL: {req.url}")
+    loguru.logger.info(f"Request status code: {req.status_code}")
+    if req.ok:
+        soup = bs4.BeautifulSoup(req.text, "html.parser")
+
+        target_element = soup.find("div", class_="row section-article")
+        if target_element:
+            data_point = target_element.find("h3", class_="standard-link").text.strip()
+
+        loguru.logger.info(f"Data point: {data_point}")
+        return data_point
+    
+def scrape_data_point_football():
+    """
+    Scrapes the main headline from The Daily Pennsylvanian Football section.
+    Returns:
+        str: The headline text if found, otherwise an empty string.
+    """
+    req = requests.get("https://www.thedp.com/section/football")
+    loguru.logger.info(f"Request URL: {req.url}")
+    loguru.logger.info(f"Request status code: {req.status_code}")
+    if req.ok:
+        soup = bs4.BeautifulSoup(req.text, "html.parser")
+
+        target_element = soup.find("div", class_="row section-article")
+        if target_element:
+            data_point = target_element.find("h3", class_="standard-link").text.strip()
+
+        loguru.logger.info(f"Data point: {data_point}")
+        return data_point
+    
+def scrape_data_point_soccer():
+    """
+    Scrapes the main headline from The Daily Pennsylvanian Men's Soccer section.
+    Returns:
+        str: The headline text if found, otherwise an empty string.
+    """
+    req = requests.get("https://www.thedp.com/section/m-soccer")
+    loguru.logger.info(f"Request URL: {req.url}")
+    loguru.logger.info(f"Request status code: {req.status_code}")
+    if req.ok:
+        soup = bs4.BeautifulSoup(req.text, "html.parser")
+
+        target_element = soup.find("div", class_="row section-article")
+        if target_element:
+            data_point = target_element.find("h3", class_="standard-link").text.strip()
+
         loguru.logger.info(f"Data point: {data_point}")
         return data_point
 
@@ -76,10 +131,16 @@ if __name__ == "__main__":
     loguru.logger.info("Starting scrape")
     try:
         home_headline = scrape_home_headline()
-        lacrosse_headline = scrape_data_point_mens_lax()
+        lacrosse_headline = scrape_data_point_lacrose()
+        squash_headline = scrape_data_point_squash()
+        football_headline = scrape_data_point_football()
+        soccer_headline = scrape_data_point_soccer()
         data_point = {
             "home_headline": home_headline,
-            "lacrosse_headline": lacrosse_headline
+            "lacrosse_headline": lacrosse_headline,
+            "squash_headline": squash_headline,
+            "football_headline": football_headline,
+            "soccer_headline": soccer_headline
         }
     except Exception as e:
         loguru.logger.error(f"Failed to scrape data point: {e}")
