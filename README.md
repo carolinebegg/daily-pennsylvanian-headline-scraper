@@ -1,3 +1,7 @@
+# HW 2 PART IV Updated Git Scraper: Sports Headlines
+
+In this project, I enhanced the existing web scraper to collect the most recent headlines for men's lacrosse, men's squash, men's soccer, and football from The Daily Pennsylvanian website. Unlike scraping the main headline from the front page, which relied on the "frontpage-link" class, I had to modify the scraper function to target specific sections and HTML structures for each sport. By examining the webpage's HTML, I identified the relevant <div> elements and classes that contained the desired headlines. Using BeautifulSoup, I navigated through the HTML tree to locate the <h3> elements with the "standard-link" class, which held the headline text. After extracting the headline, I used the strip() method to remove any leading or trailing whitespace. Finally, I integrated the modified scraper function into the existing script, ensuring that the scraped headlines were properly saved using the DailyEventMonitor class.
+
 # Basic Git Scraper Template
 
 This template provides a starting point for **git scraping**—the technique of scraping data from websites and automatically committing it to a Git repository using workflows, [coined by Simon Willison](https://simonwillison.net/2020/Oct/9/git-scraping/).
