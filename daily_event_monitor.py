@@ -10,7 +10,8 @@ import pytz
 
 TIMEZONE = pytz.timezone("US/Eastern")
 
-DailyEventValueType = str
+# DailyEventValueType = str
+DailyEventValueType = typing.Dict[str, str]
 
 
 def time_now() -> str:
@@ -145,7 +146,7 @@ class DailyEventMonitor:
         year: int,
         month: int,
         day: int,
-        value: DailyEventValueType,
+        headlines: DailyEventValueType,
         ignore_repeat: bool = True,
     ) -> bool:
         """
@@ -160,14 +161,14 @@ class DailyEventMonitor:
         """
         data = self._lookup_day(year=year, month=month, day=day)
 
-        if ignore_repeat and len(data) > 0 and data[-1][1] == value:
+        if ignore_repeat and len(data) > 0 and data[-1][1] == headlines:
             return False
 
         # add data point
-        data.append((time_now(), value))
+        data.append((time_now(), headlines))
         return True
 
-    def add_today(self, value: DailyEventValueType, ignore_repeat: bool = True) -> bool:
+    def add_today(self, headlines: DailyEventValueType, ignore_repeat: bool = True) -> bool:
         """
         Adds an event for the current day.
 
@@ -180,7 +181,7 @@ class DailyEventMonitor:
             year=year_now,
             month=month_now,
             day=day_now,
-            value=value,
+            headlines=headlines,
             ignore_repeat=ignore_repeat,
         )
 
